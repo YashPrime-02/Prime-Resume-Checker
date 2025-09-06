@@ -1,0 +1,131 @@
+/* Full-page container */
+.upload-editor {
+  position: relative;
+  width: 99vw;
+  height: 100vh;
+  padding: 60px 20px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  background: linear-gradient(135deg, #0a0a0a, #0f1c2c, #16263a);
+  font-family: "Poppins", sans-serif;
+  color: #fff;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Heading */
+.upload-editor h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: #00f0ff;
+  text-align: center;
+}
+
+/* Textarea */
+.upload-editor textarea {
+  width: 100%;
+  max-width: 900px;
+  min-height: 300px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 1rem;
+  color: #fff;
+  resize: vertical;
+  backdrop-filter: blur(8px);
+  outline: none;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.upload-editor textarea:focus {
+  border: 1px solid #00f0ff;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+}
+
+/* File input wrapper */
+.file-input {
+  margin-top: 25px;
+  text-align: center;
+}
+
+.file-input label {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #00f0ff;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(0, 240, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.file-input label:hover {
+  background: rgba(0, 240, 255, 0.1);
+  box-shadow: 0 6px 15px rgba(0, 240, 255, 0.3);
+}
+
+.file-input input {
+  display: none;
+}
+
+/* 🔹 Responsiveness */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .upload-editor h2 {
+    font-size: 1.8rem;
+  }
+
+  .upload-editor textarea {
+    font-size: 0.95rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .upload-editor {
+    padding: 40px 15px;
+    justify-content: flex-start;
+  }
+
+  .upload-editor h2 {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+  }
+
+  .upload-editor textarea {
+    min-height: 220px;
+    font-size: 0.9rem;
+  }
+
+  .file-input label {
+    padding: 10px 18px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .upload-editor h2 {
+    font-size: 1.3rem;
+  }
+
+  .upload-editor textarea {
+    min-height: 180px;
+    font-size: 0.85rem;
+  }
+
+  .file-input label {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+}

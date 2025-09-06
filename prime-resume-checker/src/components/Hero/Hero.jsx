@@ -47,7 +47,7 @@ function Hero() {
             to beat the competition.
           </p>
           <div className="hero-buttons">
-            <a href="/upload" className="btn primary">Upload Resume</a>
+            <a href="/upload" className= "btn primary">Upload Resume</a>
             <a href="/about" className="btn secondary">Learn More</a>
           </div>
         </div>
