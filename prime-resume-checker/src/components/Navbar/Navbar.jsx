@@ -35,10 +35,10 @@ function Navbar() {
 
       {/* Navigation Links */}
       <ul className={`nav-links${open ? " open" : ""}`}>
-        <li><a href="#upload" onClick={handleLinkClick}>Upload</a></li>
+        <li><a href="#about" onClick={handleLinkClick}>About</a></li>
         <li><a href="#features" onClick={handleLinkClick}>Features</a></li>
         <li><a href="#testimonials" onClick={handleLinkClick}>Testimonials</a></li>
-        <li><a href="#score" onClick={handleLinkClick}>Score</a></li>
+        <li><a href="#contact" onClick={handleLinkClick}>Contact</a></li>
       </ul>
 
       {/* Background Overlay */}
