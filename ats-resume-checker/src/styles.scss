@@ -1,1 +1,37 @@
-/* You can add global styles to this file, and also import other style files */
+/* 🔹 Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 🔹 Full viewport coverage */
+html, body {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;   /* stop horizontal scrollbars */
+  background: #000;     /* fallback background */
+  font-family: 'Poppins', sans-serif;
+}
+
+/* 🔹 Force all sections full width */
+section, header, footer, div {
+  max-width: 100% !important;
+}
+
+/* 🔹 Navbar fix */
+header, .navbar {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* 🔹 Hero section */
+.hero {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000; /* or hero gradient/image */
+}

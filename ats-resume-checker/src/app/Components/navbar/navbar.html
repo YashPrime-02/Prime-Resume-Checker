@@ -1,0 +1,24 @@
+<nav class="navbar">
+  <!-- Logo -->
+  <a routerLink="/">
+    <div class="logo">
+      <img src="assets/Logos/Prime-Resume-Logo.png" alt="LOGO" />
+    </div>
+  </a>
+  <!-- Hamburger -->
+  <div class="hamburger" [ngClass]="{ open: open }" (click)="toggleMenu()" tabindex="0" aria-label="Toggle menu" role="button">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <!-- Navigation Links -->
+  <ul class="nav-links" [ngClass]="{ open: open }">
+    <li><a href="#about" (click)="handleLinkClick()">About</a></li>
+    <li><a href="/upload" (click)="handleLinkClick()">Upload</a></li>
+    <li><a href="#features" (click)="handleLinkClick()">Features</a></li>
+    <li><a href="#testimonials" (click)="handleLinkClick()">Testimonials</a></li>
+    <li><a href="#contact" (click)="handleLinkClick()">Contact</a></li>
+  </ul>
+  <!-- Background Overlay -->
+  <div class="overlay" *ngIf="open" (click)="toggleMenu()"></div>
+</nav>

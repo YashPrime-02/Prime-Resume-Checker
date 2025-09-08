@@ -1,0 +1,405 @@
+/* Reset global spacing */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  overflow-x: hidden; /* prevent horizontal scroll */
+  box-sizing: border-box;
+}
+
+/* ---------------- Hero Section ---------------- */
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  color: #fff; /* default content color */
+  overflow: hidden;
+}
+
+/* 3D Techno Lines Background */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: #0a0a0a;
+  perspective: 1200px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Individual moving techno lines */
+.tech-line {
+  position: absolute;
+  width: 2px;
+  height: 250%;
+  background: linear-gradient(180deg, #00f0ff 0%, transparent 50%, #00f0ff 100%);
+  top: -75%;
+  left: calc(20% * var(--i));
+  transform-origin: center;
+  animation: rotateLines 8s linear infinite;
+  opacity: 0.6;
+}
+
+/* 3D rotation animation for lines */
+@keyframes rotateLines {
+  0% {
+    transform: translateZ(-500px) rotateY(0deg) translateY(0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateZ(500px) rotateY(180deg) translateY(50%);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateZ(-500px) rotateY(360deg) translateY(0);
+    opacity: 0.3;
+  }
+}
+
+/* Semi-transparent overlay for content readability */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6); /* dark overlay */
+  z-index: 1;
+}
+
+/* ---------------- Hero Content ---------------- */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 900px;
+  padding: 0 20px;
+  margin: 0 auto;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+  color: #ffffff; /* main content white */
+}
+
+.hero-content h1 span {
+  color: #00f0ff; /* aqua span for "Prime Resume Reviewer" */
+}
+
+.hero-content p {
+  margin: 20px 0 0 0;
+  font-size: 1.2rem;
+  color: #ddd; /* light grey for readability */
+}
+
+/* ---------------- Hero Buttons ---------------- */
+.hero-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 30px;
+  flex-wrap: wrap;
+  z-index: 2;
+  position: relative;
+}
+
+.btn {
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.3), rgba(0, 196, 204, 0.3));
+  color: #00f0ff;
+  border: 1px solid rgba(0, 240, 255, 0.5);
+}
+
+.btn.primary:hover {
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.5), rgba(0, 196, 204, 0.5));
+  color: #fff;
+  box-shadow: 0 12px 24px rgba(0, 240, 255, 0.3), 0 0 20px rgba(0, 240, 255, 0.2);
+  transform: translateY(-3px) scale(1.05);
+}
+
+.btn.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+/* ---------------- Why Us Section ---------------- */
+.why-us {
+  position: relative;
+  width: 100%;
+  background: #000; /* keep dark */
+  color: #fff;
+  padding: 80px 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Overlay for readability */
+.why-us::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1;
+}
+
+/* Background diagonal lines (techno effect) */
+.why-us-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Individual diagonal moving lines */
+.why-us-line {
+  position: absolute;
+  width: 2px;
+  height: 150%;
+  background: linear-gradient(180deg, #ff00ff 0%, transparent 50%, #00f0ff 100%);
+  top: -25%;
+  left: calc(15% * var(--i));
+  transform: rotate(45deg);
+  opacity: 0.4;
+  animation: whyUsMove 10s linear infinite;
+}
+
+@keyframes whyUsMove {
+  0% {
+    transform: rotate(45deg) translateY(-200px);
+    opacity: 0.3;
+  }
+  50% {
+    transform: rotate(45deg) translateY(200px);
+    opacity: 0.7;
+  }
+  100% {
+    transform: rotate(45deg) translateY(-200px);
+    opacity: 0.3;
+  }
+}
+/* ---------------- Why Us Section ---------------- */
+.why-us {
+  position: relative;
+  width: 100%;
+  background: #000; /* dark background */
+  color: #fff;
+  padding: 80px 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Background overlay for readability */
+.why-us::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1;
+}
+
+/* Techno background lines */
+.why-us-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.why-us-line {
+  position: absolute;
+  width: 2px;
+  height: 150%;
+  background: linear-gradient(180deg, #ff00ff 0%, transparent 50%, #00f0ff 100%);
+  top: -25%;
+  left: calc(15% * var(--i));
+  transform: rotate(45deg);
+  opacity: 0.4;
+  animation: whyUsMove 10s linear infinite;
+}
+
+@keyframes whyUsMove {
+  0% {
+    transform: rotate(45deg) translateY(-200px);
+    opacity: 0.3;
+  }
+  50% {
+    transform: rotate(45deg) translateY(200px);
+    opacity: 0.7;
+  }
+  100% {
+    transform: rotate(45deg) translateY(-200px);
+    opacity: 0.3;
+  }
+}
+
+/* ---------------- Content ---------------- */
+.why-us-title {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 60px;
+  font-weight: 700;
+  color: #00f0ff;
+  letter-spacing: 1px;
+}
+
+.why-us-container {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.why-us-points {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  z-index: 2;
+}
+
+/* ---------------- Points ---------------- */
+.point {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  position: relative;
+}
+
+.point.right {
+  justify-content: flex-end;
+}
+
+.point-content {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  backdrop-filter: blur(6px);
+  padding: 20px 25px;
+  border-radius: 12px;
+  width: 45%;
+  min-width: 280px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.point-content:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 240, 255, 0.3);
+}
+
+.point-content h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #00f0ff;
+}
+
+.point-content p {
+  margin: 0;
+  font-size: 1rem;
+  color: #ddd;
+  line-height: 1.5;
+}
+
+/* ---------------- Scroll Indicator ---------------- */
+.scroll-indicator {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  z-index: 1;
+}
+
+.scroll-ball {
+  position: absolute;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  background: #00f0ff;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.8);
+  transform: translate(-50%, 0);
+  transition: top 0.2s ease-out;
+  z-index: 2;
+}
+
+/* Optional moving effect when scrolling */
+.scroll-ball.moving {
+  transform: translate(-50%, 0) scale(1.1);
+  transition: top 0.15s ease-out, transform 0.2s ease;
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 900px) {
+  .point-content {
+    width: 70%;
+  }
+}
+
+@media (max-width: 600px) {
+  .why-us-title {
+    font-size: 2rem;
+  }
+
+  .point,
+  .point.right {
+    justify-content: center;
+  }
+
+  .point-content {
+    width: 90%;
+    text-align: center;
+  }
+
+  .scroll-indicator {
+    left: 20px; /* move line to left for mobile */
+  }
+
+  .scroll-ball {
+    left: 20px;
+    transform: translate(0, 0);
+  }
+}
