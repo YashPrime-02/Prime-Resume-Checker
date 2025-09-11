@@ -2,7 +2,7 @@
   <!-- Logo -->
   <a routerLink="/">
     <div class="logo">
-      <img src="assets/Logos/Prime-Resume-Logo.png" alt="LOGO" />
+      <img src="/assets/Prime-Resume-Logo.png" alt="LOGO" />
     </div>
   </a>
   <!-- Hamburger -->
@@ -13,11 +13,11 @@
   </div>
   <!-- Navigation Links -->
   <ul class="nav-links" [ngClass]="{ open: open }">
-    <li><a href="#about" (click)="handleLinkClick()">About</a></li>
-    <li><a href="/upload" (click)="handleLinkClick()">Upload</a></li>
-    <li><a href="#features" (click)="handleLinkClick()">Features</a></li>
-    <li><a href="#testimonials" (click)="handleLinkClick()">Testimonials</a></li>
-    <li><a href="#contact" (click)="handleLinkClick()">Contact</a></li>
+    <li><a routerLink="#about" (click)="handleLinkClick()">About</a></li>
+<li><a routerLink="upload" (click)="handleLinkClick()">Upload</a></li>
+    <li><a routerLink="#features" (click)="handleLinkClick()">Features</a></li>
+    <li><a routerLink="#testimonials" (click)="handleLinkClick()">Testimonials</a></li>
+    <li><a routerLink="/contact" (click)="handleLinkClick()">Contact</a></li>
   </ul>
   <!-- Background Overlay -->
   <div class="overlay" *ngIf="open" (click)="toggleMenu()"></div>

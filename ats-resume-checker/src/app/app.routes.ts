@@ -1,3 +1,26 @@
 import { Routes } from '@angular/router';
+import { Hero } from './Components/hero/hero';
+import { UploadComponent } from './Components/upload.component/upload.component';
+import { Contact } from './Components/contact/contact';
 
-export const routes: Routes = [];
+export const routes: Routes = [
+
+  { path: '', redirectTo: 'index', pathMatch: 'full' },
+
+  {
+    path: 'index',
+    component: Hero,
+    data: { title: 'PRIME RESUME REVIEWER' }
+  },
+  {
+    path: 'upload',
+    component: UploadComponent,
+    data: { title: 'Upload' }
+  },
+  {
+    path: 'contact',
+    component: Contact,
+    data: { title: 'Contact' }
+  },
+
+];
