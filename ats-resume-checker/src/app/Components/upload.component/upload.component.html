@@ -46,7 +46,7 @@
     <pre>{{ resumeText }}</pre>
   </div>
 
- <textarea
+<textarea
   *ngIf="!fileName"
   [(ngModel)]="resumeText"
   (ngModelChange)="updateHasResume()"
