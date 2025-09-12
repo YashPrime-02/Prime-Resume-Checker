@@ -1,0 +1,40 @@
+<div class="resume-review">
+  <!-- Animated 3D Tech Background -->
+  <div class="tech-bg"></div>
+
+  <!-- Content -->
+  <div class="review-card">
+    <h2>AI Resume Scanner</h2>
+    <div class="progress-wrapper">
+      <div class="progress-bar">
+        <div
+          class="progress-fill"
+          [style.width.%]="progress"
+        ></div>
+      </div>
+      <span class="progress-text">{{ progress }}%</span>
+    </div>
+
+    <!-- Animated messages -->
+    <div class="messages">
+      <p
+        *ngFor="let msg of displayedMessages; let i = index"
+        [class.active]="i === currentMessageIndex"
+      >
+        {{ msg }}
+      </p>
+    </div>
+
+    <div *ngIf="progress === 100" class="result">
+      <h3>📊 Match Result</h3>
+      <p>
+        Best Fit Role:
+        <strong>{{ detectedRole }}</strong>
+      </p>
+      <p>
+        Similarity Score:
+        <strong>{{ similarityScore }}</strong>
+      </p>
+    </div>
+  </div>
+</div>

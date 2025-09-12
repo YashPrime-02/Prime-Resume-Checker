@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Hero } from './Components/hero/hero';
 import { UploadComponent } from './Components/upload.component/upload.component';
 import { Contact } from './Components/contact/contact';
+import { ResumeReviewComponent } from './Components/resume-review/resume-review';
 
 export const routes: Routes = [
 
@@ -22,5 +23,11 @@ export const routes: Routes = [
     component: Contact,
     data: { title: 'Contact' }
   },
+  {
+    path:'resume-review',
+    component: ResumeReviewComponent,
+        data: { title: 'Resume Review' },
+
+  }
 
 ];

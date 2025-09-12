@@ -420,3 +420,49 @@ textarea:focus {
   font-weight: 500;
   margin-bottom: 3%;
 }
+
+button[mat-raised-button].mat-primary {
+  background: linear-gradient(90deg, #00f0ff, #00d0e5);
+  color: #181c2b;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1em;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button[mat-raised-button].mat-primary:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #00f0ff80;
+}
+
+button[mat-raised-button].mat-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.upload-footer a.btn.primary {
+  display: inline-block;
+  background: linear-gradient(90deg, #00f0ff, #00d0e5);
+  color: #181c2b;
+  padding: 10px 18px;
+  font-size: 1em;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 240, 255, 0.3);
+}
+
+.upload-footer a.btn.primary:hover:not(.disabled) {
+  background: #00d0e5;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #00f0ff80;
+}
+
+.upload-footer a.btn.primary.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}

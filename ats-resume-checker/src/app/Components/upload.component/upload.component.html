@@ -1,27 +1,31 @@
 <section class="upload-section">
-<div class="particles">
-  <span></span>
-  <span></span>
-  <span></span>
-  <span></span>
-</div>
+  <div class="particles">
+    <span></span><span></span><span></span><span></span>
+  </div>
+
   <h2>Upload or Paste Your Resume</h2>
 
   <div class="upload-controls">
-   <label class="file-label">
-  <input type="file" (change)="onFileChange($event)" accept=".txt,.pdf,.doc,.docx" />
-  Choose File
-</label>
+    <label class="file-label">
+      <input
+        type="file"
+        (change)="onFileChange($event)"
+        accept=".txt,.pdf,.doc,.docx"
+      />
+      Choose File
+    </label>
 
-   <button mat-raised-button color="primary" (click)="clearText()" [disabled]="!resumeText && !fileName">
-  Clear
-</button>
-
-
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="clearText()"
+      [disabled]="!resumeText && !fileName"
+    >
+      Clear
+    </button>
   </div>
 
-<!-- 👇 Show selected file name -->
-<p *ngIf="fileName" class="file-name">📄 {{ fileName }}</p>
+  <p *ngIf="fileName" class="file-name">📄 {{ fileName }}</p>
 
   <div *ngIf="isLoading" class="loading-container">
     <mat-icon class="animated-man">directions_run</mat-icon>
@@ -29,27 +33,37 @@
     <p>Parsing document...</p>
   </div>
 
-  <pdf-viewer
-    *ngIf="pdfSrc"
-    [src]="pdfSrc"
-    (after-load-complete)="onPdfLoad($event)"
-    style="display: none;"
-  ></pdf-viewer>
+<pdf-viewer
+  *ngIf="pdfSrc"
+  [src]="pdfSrc"
+  (after-load-complete)="onPdfLoad($event)"
+  style="height:1px;width:1px;opacity:0;pointer-events:none;"
+></pdf-viewer>
+
 
   <div *ngIf="resumeText" class="resume-preview">
     <h3>Resume Preview</h3>
     <pre>{{ resumeText }}</pre>
   </div>
 
-  <textarea
-    [(ngModel)]="resumeText"
-    rows="15"
-    placeholder="Paste or edit your resume here..."
-  ></textarea>
+ <textarea
+  *ngIf="!fileName"
+  [(ngModel)]="resumeText"
+  (ngModelChange)="updateHasResume()"
+  rows="15"
+  placeholder="Paste or edit your resume here..."
+></textarea>
 
   <div class="upload-footer">
-    <button mat-raised-button class="btn primary" [disabled]="!resumeText">
-      Score Resume
-    </button>
+    <button
+  mat-raised-button
+  color="accent"
+  class="btn primary"
+  (click)="goToResumeReview()"
+  [disabled]="!hasResume"
+>
+  Score Resume
+</button>
+
   </div>
 </section>
