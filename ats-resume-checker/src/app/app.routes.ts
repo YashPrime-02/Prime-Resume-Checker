@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { Hero } from './Components/hero/hero';
-import { UploadComponent } from './Components/upload.component/upload.component';
+import { UploadComponent } from './Components/resume-review/upload.component/upload.component';
 import { Contact } from './Components/contact/contact';
 import { ResumeReviewComponent } from './Components/resume-review/resume-review';
 

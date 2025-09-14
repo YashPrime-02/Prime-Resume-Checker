@@ -4,123 +4,237 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Poppins', sans-serif;
-  color: #f4f6fa;
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  color: #e7eef2;
   overflow: hidden;
   padding: 20px;
+  background: linear-gradient(180deg, #0b0f11 0%, #0b0f11 100%);
 }
 
-/* 3D Animated Tech Background */
+/* 3D tech background */
 .tech-bg {
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
+  inset: -40%;
   background: repeating-linear-gradient(
       0deg,
-      rgba(0, 255, 255, 0.05) 0px,
-      rgba(0, 255, 255, 0.05) 2px,
+      rgba(0, 255, 255, 0.03) 0px,
+      rgba(0, 255, 255, 0.03) 2px,
       transparent 2px,
-      transparent 60px
+      transparent 48px
     ),
     repeating-linear-gradient(
       90deg,
-      rgba(0, 255, 255, 0.05) 0px,
-      rgba(0, 255, 255, 0.05) 2px,
+      rgba(0, 255, 255, 0.03) 0px,
+      rgba(0, 255, 255, 0.03) 2px,
       transparent 2px,
-      transparent 60px
+      transparent 48px
     );
-  animation: moveGrid 30s linear infinite;
-  transform: rotateX(45deg) rotateZ(0deg);
+  transform: rotateX(60deg);
+  filter: blur(6px);
   z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
 }
 
-@keyframes moveGrid {
-  0% {
-    transform: rotateX(45deg) rotateZ(0deg) translateY(0);
-  }
-  100% {
-    transform: rotateX(45deg) rotateZ(360deg) translateY(-200px);
-  }
-}
-
-/* Scanner Card */
+/* Card */
 .review-card {
   position: relative;
   z-index: 1;
-  max-width: 700px;
+  max-width: 920px;
   width: 100%;
-  padding: 40px;
-  background: rgba(34, 34, 34, 0.9);
-  border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 255, 255, 0.15);
+  padding: 28px;
+  background: rgba(18, 21, 23, 0.88);
+  border-radius: 14px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 40px rgba(0, 255, 255, 0.02) inset;
+  text-align: left;
+  margin: 16px;
+}
+
+/* Header */
+.title {
   text-align: center;
+  margin: 4px 0 8px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: #f3fbff;
 }
 
-/* Progress Bar */
+/* Progress */
 .progress-wrapper {
-  margin: 25px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
 }
-
 .progress-bar {
-  width: 100%;
-  height: 18px;
-  background: rgba(255, 255, 255, 0.1);
+  flex: 1;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.06);
   border-radius: 10px;
   overflow: hidden;
-  margin-bottom: 10px;
+  position: relative;
 }
-
 .progress-fill {
   height: 100%;
   background: linear-gradient(90deg, #00f2fe, #4facfe);
-  transition: width 0.4s ease-in-out;
+  transition: width 0.35s ease;
 }
-
 .progress-text {
-  font-weight: 600;
+  min-width: 44px;
+  text-align: center;
   color: #00f2fe;
+  font-weight: 600;
 }
 
-/* Animated Messages */
+/* Messages */
 .messages {
-  min-height: 60px;
-  margin: 15px 0;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
 }
-
 .messages p {
   opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.6s ease;
-  font-size: 14px;
+  transform: translateY(8px);
+  transition: all 0.45s ease;
+  font-size: 13px;
+  color: #cfeff7;
+  margin: 0;
 }
-
 .messages p.active {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* Result Section */
+/* Result */
 .result {
-  margin-top: 25px;
-  background: rgba(0, 255, 255, 0.05);
-  padding: 15px;
-  border-radius: 12px;
-  animation: fadeIn 1s ease forwards;
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+/* Best fit row */
+.best-fit h3 {
+  margin: 0 0 8px;
+  text-align: center;
+  font-size: 18px;
+}
+.best-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.best-label { color: #9fbfd9; font-weight: 600; }
+.best-value { font-weight: 700; font-size: 18px; color: #ffffff; }
+.best-score { color: #00f2fe; font-weight: 700; }
+
+/* Suggestions */
+.suggestions {
+  margin-top: 8px;
+}
+.suggestions h4 {
+  margin: 8px 0;
+  color: #d9f7ff;
+  font-size: 15px;
+}
+.suggestions ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.suggestion-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.01);
+  margin-bottom: 10px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.suggestion-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+.rank {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.15));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a9f7ff;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* main suggestion block */
+.suggestion-main {
+  flex: 1;
+}
+.role-name {
+  font-weight: 700;
+  font-size: 15px;
+  color: #eefaff;
+  margin-bottom: 6px;
+}
+.role-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.meta-pill {
+  background: rgba(0,0,0,0.35);
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: #bfeefc;
+  font-weight: 600;
+}
+
+/* similarity bar */
+.similarity-bar {
+  height: 8px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.similarity-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, rgba(0,242,254,0.9), rgba(79,172,254,0.9));
+  transition: width 0.45s ease;
+}
+
+/* No suggestions */
+.no-suggestions {
+  text-align: center;
+  color: #b4c9cf;
+  padding: 8px 0;
+  font-size: 13px;
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 820px) {
   .review-card {
-    padding: 25px;
+    padding: 18px;
   }
-  .messages p {
-    font-size: 12px;
+  .best-row {
+    flex-direction: column;
+    gap: 6px;
   }
+  .rank { width: 36px; height: 36px; font-size: 13px; }
+}
+@media (max-width: 420px) {
+  .progress-text { font-size: 12px; min-width: 36px; }
+  .role-name { font-size: 14px; }
+  .meta-pill { font-size: 11px; padding: 3px 6px; }
 }
