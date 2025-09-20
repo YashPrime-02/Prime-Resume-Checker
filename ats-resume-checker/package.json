@@ -31,6 +31,7 @@
     "@angular/material": "^20.2.2",
     "@angular/platform-browser": "^20.2.0",
     "@angular/router": "^20.2.0",
+    "@google/generative-ai": "^0.24.1",
     "mammoth": "^1.10.0",
     "ng2-pdf-viewer": "^10.4.0",
     "pdfjs-dist": "^5.4.149",

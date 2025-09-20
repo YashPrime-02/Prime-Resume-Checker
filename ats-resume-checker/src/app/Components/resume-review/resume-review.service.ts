@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
+import { GoogleGenerativeAI } from '@google/generative-ai'; // npm install @google/generative-ai
 import { environment } from '../../../environments/environment';
 
 export interface ClassificationResult {
@@ -19,39 +20,94 @@ export interface RoleSuggestion {
   providedIn: 'root',
 })
 export class ResumeReviewService {
-  // Hugging Face endpoints
-  private embedUrl =
-    'https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2';
-  private classifyUrl =
-    'https://api-inference.huggingface.co/models/facebook/bart-large-mnli';
-  private summarizerUrl =
-    'https://api-inference.huggingface.co/models/facebook/bart-large-cnn';
+  private genAI: GoogleGenerativeAI | null = null;
+  private generativeModel = 'gemini-1.5-flash'; // Free tier model; swap to 'gemini-2.0-pro' for advanced if needed
 
-  private headers = new HttpHeaders({
-    Authorization: `Bearer ${environment.huggingFaceToken}`,
-    'Content-Type': 'application/json',
-  });
+  // Free public jobs API for latest roles (no auth, CORS-friendly)
+  private jobsApiUrl = 'https://remoteok.io/api';
 
-  // Simple in-memory cache
-  private embeddingCache = new Map<string, number[]>();
+  // Role descriptions for better similarity matching
+  private roleDescriptions: Record<string, string> = {
+    'Frontend Developer': 'Develops user interfaces using HTML, CSS, JavaScript, React, Vue.',
+    'Backend Developer': 'Builds server-side logic, APIs, databases with Node.js, Python, Java.',
+    'Fullstack Developer': 'Handles both frontend and backend development, full application stack.',
+    'Data Scientist': 'Analyzes data, builds models using Python, R, SQL, machine learning.',
+    'Machine Learning Engineer': 'Deploys ML models, works with TensorFlow, PyTorch, data pipelines.',
+    'DevOps Engineer': 'Manages CI/CD, cloud infrastructure, Docker, Kubernetes, AWS.',
+    'UI/UX Designer': 'Designs user interfaces, wireframes, prototypes with Figma, Adobe XD.',
+    'Product Manager': 'Oversees product lifecycle, user research, agile methodologies.',
+    'Software Engineer': 'Writes, tests, maintains software code in various languages.',
+    'Cloud Engineer': 'Manages cloud services like AWS, Azure, GCP, infrastructure as code.',
+    'QA Engineer': 'Tests software, automation with Selenium, writes test cases.',
+    'Mobile App Developer': 'Builds iOS/Android apps with Swift, Kotlin, React Native.',
+    'Cybersecurity Specialist': 'Protects systems, ethical hacking, firewalls, compliance.',
+    'Business Analyst': 'Gathers requirements, process modeling, stakeholder communication.',
+    'Database Administrator': 'Manages databases, SQL/NoSQL, performance tuning, backups.',
+    'AI Researcher': 'Conducts research in artificial intelligence, papers, algorithms.',
+  };
+
+  private requestCount = 0;
+  private readonly maxRequests = 45;
 
   constructor(private http: HttpClient) {
-    if (!environment.huggingFaceToken) {
+    if (!environment.googleApiKey) {
       console.warn(
-        'ResumeReviewService: huggingFaceToken is empty. Set environment.huggingFaceToken to use Hugging Face inference API.'
+        'ResumeReviewService: googleApiKey is empty. Set environment.googleApiKey from Google AI Studio for Gemini API.'
       );
+      return;
+    }
+    this.genAI = new GoogleGenerativeAI(environment.googleApiKey);
+  }
+
+  /**
+   * Check and increment request count; throw if limit exceeded.
+   */
+  private async checkLimit(): Promise<void> {
+    this.requestCount++;
+    if (this.requestCount > this.maxRequests) {
+      throw new Error('Max limit used: Daily request quota exceeded (45 requests). Please try again tomorrow or upgrade to a paid plan.');
     }
   }
 
   /**
-   * Build a dynamic candidate role list by scanning resume text for role-like keywords.
+   * Fetch latest job titles from free public API for dynamic role candidates.
+   * Returns unique array (falls back to defaults if fetch fails).
+   */
+  private async fetchLatestRoles(maxRoles = 20): Promise<string[]> {
+    const defaults = Object.keys(this.roleDescriptions);
+
+    try {
+      const params = new HttpHeaders({
+        'Content-Type': 'application/json',
+      });
+      const url = `${this.jobsApiUrl}`;
+      const res$ = this.http.get<any>(url, { headers: params });
+      const response = await lastValueFrom(res$);
+
+      // Response shape: array of jobs [{ position: string, ... }, ...]
+      const jobs = Array.isArray(response) ? response : [];
+      const roles = jobs
+        .map((job: any) => (job.position || job.title || '').trim())
+        .filter((title: string) => title && title.length > 5 && !title.includes('(')) // Filter noise, e.g., remote tags
+        .slice(0, maxRoles);
+
+      // Unique + prioritize fresh ones
+      return Array.from(new Set(roles));
+    } catch (err) {
+      console.warn('fetchLatestRoles() failed, using defaults', err);
+      return defaults;
+    }
+  }
+
+  /**
+   * Build a dynamic candidate role list: internet-fetched + extracted keywords + defaults.
    * Returns an array (may be empty).
    */
-  private extractRoleKeywords(text: string): string[] {
+  private async extractRoleKeywords(text: string): Promise<string[]> {
     if (!text) return [];
 
+    // Simple keyword extraction (same as before, but async-friendly)
     const t = text.toLowerCase();
-
     const mapping: Record<string, string> = {
       frontend: 'Frontend Developer',
       'front-end': 'Frontend Developer',
@@ -95,7 +151,9 @@ export class ResumeReviewService {
       }
     }
 
-    return Array.from(found);
+    // Augment with latest from internet
+    const latest = await this.fetchLatestRoles(10);
+    return Array.from(new Set([...Array.from(found), ...latest]));
   }
 
   /**
@@ -103,98 +161,70 @@ export class ResumeReviewService {
    * If summarizer fails, fallback to full resume text.
    */
   private async summarizeText(text: string): Promise<string> {
-    if (!text || !text.trim()) return '';
+    if (!text || !text.trim() || !this.genAI) return '';
 
     try {
-      const payload = { inputs: text, parameters: { max_length: 60 } };
-      const res$ = this.http.post<any>(this.summarizerUrl, payload, {
-        headers: this.headers,
-      });
-      const response = await lastValueFrom(res$);
-
-      // Many summarizers return array with { summary_text: '...' }
-      if (Array.isArray(response) && response[0]?.summary_text) {
-        return response[0].summary_text as string;
-      }
-      // Some endpoints may return object with summary_text
-      if (response?.summary_text) return response.summary_text;
+      await this.checkLimit();
+      const model = this.genAI.getGenerativeModel({ model: this.generativeModel });
+      const prompt = `Summarize the following resume in 1-2 sentences, focusing on key skills, experience, and role fit. Keep under 60 words: ${text}`;
+      const result = await model.generateContent(prompt);
+      const summary = result.response.text().trim();
+      return summary || text; // Fallback if empty
     } catch (err) {
-      // ignore and fallback
+      if (err instanceof Error && err.message.includes('Max limit used')) {
+        throw err; // Re-throw limit error
+      }
       console.warn('summarizeText() failed, using original resume', err);
+      return text;
     }
-    return text;
   }
 
   /**
-   * Detect candidate roles using zero-shot classification.
+   * Detect candidate roles using zero-shot classification via Gemini prompt.
    * Returns an array of {label, score} (sorted by score desc).
    */
   async detectRoles(resume: string, maxCandidates = 5): Promise<ClassificationResult[]> {
-    if (!resume || !resume.trim()) return [{ label: 'Unknown', score: 0 }];
+    if (!resume || !resume.trim() || !this.genAI) return [{ label: 'Unknown', score: 0 }];
 
-    // Build dynamic candidate list: extracted keywords + fallback list
-    const defaults = [
-      'Frontend Developer',
-      'Backend Developer',
-      'Fullstack Developer',
-      'Data Scientist',
-      'Machine Learning Engineer',
-      'DevOps Engineer',
-      'UI/UX Designer',
-      'Product Manager',
-      'Software Engineer',
-      'Cloud Engineer',
-      'QA Engineer',
-      'Mobile App Developer',
-      'Cybersecurity Specialist',
-      'Business Analyst',
-      'Database Administrator',
-      'AI Researcher',
-    ];
+    // Build dynamic candidate list: extracted + latest from internet
+    const extracted = await this.extractRoleKeywords(resume);
+    const defaults = Object.keys(this.roleDescriptions);
+    const candidateRoles = Array.from(new Set([...extracted, ...defaults])).slice(0, maxCandidates * 2); // Cap for prompt size
 
-    const extracted = this.extractRoleKeywords(resume);
-    // ensure unique, extracted first for priority
-    const candidateRoles = Array.from(new Set([...extracted, ...defaults]));
-
-    // compress resume (summarize) before classifying
+    // Compress resume (summarize) before classifying
     const summary = await this.summarizeText(resume);
 
-    const payload = {
-      inputs: summary || resume,
-      parameters: {
-        candidate_labels: candidateRoles,
-        multi_label: true,
-      },
-    };
+    // Zero-shot prompt for multi-label classification with scores
+    const prompt = `Classify this resume summary into the best-fitting roles from this list: ${candidateRoles.join(', ')}.
+    Output ONLY valid JSON array of objects like [{"label": "Role Name", "score": 0.95}, ...] where score is 0-1 confidence. Sort by score descending. Limit to top ${maxCandidates}.
+    Summary: ${summary || resume}`;
 
-    const maxAttempts = 3;
-    let attempt = 0;
-    let lastErr: unknown = null;
+    try {
+      await this.checkLimit();
+      const model = this.genAI.getGenerativeModel({ model: this.generativeModel });
+      const result = await model.generateContent(prompt);
+      let responseText = result.response.text().trim();
 
-    while (attempt < maxAttempts) {
-      try {
-        const res$ = this.http.post<any>(this.classifyUrl, payload, { headers: this.headers });
-        const response = await lastValueFrom(res$);
-
-        if (response?.labels && response?.scores) {
-          const results: ClassificationResult[] = response.labels.map(
-            (label: string, i: number) => ({ label, score: response.scores[i] })
-          );
-
-          // sort by classifier confidence desc and return topN
-          return results.sort((a, b) => b.score - a.score).slice(0, maxCandidates);
-        }
-
-        break;
-      } catch (err) {
-        lastErr = err;
-        attempt++;
-        await this.sleep(200 * Math.pow(2, attempt));
+      // Strip markdown code blocks (common Gemini output)
+      let jsonStr = responseText.replace(/```(?:json)?\s*/g, '').replace(/```$/g, '').trim();
+      if (!jsonStr.startsWith('[')) {
+        // Fallback: extract JSON if wrapped differently
+        const jsonMatch = responseText.match(/\[[\s\S]*\]/);
+        jsonStr = jsonMatch ? jsonMatch[0].trim() : responseText;
       }
+
+      const parsed = JSON.parse(jsonStr) as ClassificationResult[];
+      if (parsed && Array.isArray(parsed)) {
+        return parsed.slice(0, maxCandidates);
+      }
+    } catch (err) {
+      if (err instanceof Error && err.message.includes('Max limit used')) {
+        throw err; // Re-throw limit error
+      }
+      console.warn('Gemini classification parse failed', err);
     }
 
-    console.error('detectRoles() failed', lastErr);
-    // sensible fallback
+    // Sensible fallback
     return [{ label: 'Software Engineer', score: 0.3 }];
   }
 
@@ -203,22 +233,20 @@ export class ResumeReviewService {
    * embedding similarity (0..1). Sorted by similarity desc.
    */
   async getRoleSuggestions(resume: string, topK = 3): Promise<RoleSuggestion[]> {
-    if (!resume || !resume.trim()) return [{ label: 'Unknown', classifierScore: 0, similarity: 0 }];
+    if (!resume || !resume.trim() || !this.genAI) return [{ label: 'Unknown', classifierScore: 0, similarity: 0 }];
 
     // Step 1: get classifier candidate roles (label + classifier score)
     const candidates = await this.detectRoles(resume, topK);
 
-    // Step 2: compute embeddings and similarity per candidate
-    const resumeEmbedding = await this.getEmbedding(resume);
-
+    // Step 2: compute similarities per candidate (local Jaccard for quota avoidance)
     const suggestions: RoleSuggestion[] = [];
     for (const c of candidates) {
       try {
-        const roleEmbedding = await this.getEmbedding(c.label);
-        const similarity = this.cosineSimilarity(resumeEmbedding, roleEmbedding);
+        const roleDesc = this.roleDescriptions[c.label] || c.label;
+        const similarity = this.jaccardSimilarity(resume, roleDesc);
         suggestions.push({ label: c.label, classifierScore: c.score, similarity });
       } catch (err) {
-        // If embedding for role fails, set similarity 0
+        // If fails, set similarity 0
         suggestions.push({ label: c.label, classifierScore: c.score, similarity: 0 });
       }
     }
@@ -228,88 +256,24 @@ export class ResumeReviewService {
   }
 
   /**
-   * Compare resume text to a role text using embeddings & cosine similarity.
+   * Compare resume text to a role text using Jaccard similarity (set overlap).
    */
   async compareTexts(resume: string, role: string): Promise<number> {
     const trimmedResume = (resume || '').trim();
     const trimmedRole = (role || '').trim();
-    if (!trimmedResume || !trimmedRole) return 0;
+    if (!trimmedResume || !trimmedRole || !this.genAI) return 0;
 
-    const [resumeVec, roleVec] = await Promise.all([
-      this.getEmbedding(trimmedResume),
-      this.getEmbedding(trimmedRole),
-    ]);
-    return this.cosineSimilarity(resumeVec, roleVec);
+    const roleDesc = this.roleDescriptions[trimmedRole] || trimmedRole;
+    return this.jaccardSimilarity(trimmedResume, roleDesc);
   }
 
-  /** INTERNAL: call HF embedding endpoint */
-  private async getEmbedding(text: string): Promise<number[]> {
-    const key = text.slice(0, 200);
-    if (this.embeddingCache.has(key)) {
-      return this.embeddingCache.get(key)!;
-    }
-
-    // HF embeddings expect array of strings
-    const payload = { inputs: [text] };
-
-    const maxAttempts = 3;
-    let attempt = 0;
-    let lastErr: unknown = null;
-
-    while (attempt < maxAttempts) {
-      try {
-        const res$ = this.http.post<any>(this.embedUrl, payload, { headers: this.headers });
-        const response = await lastValueFrom(res$);
-        const vector = this.findFirstNumericArray(response);
-        if (!vector?.length) {
-          throw new Error('Embedding response did not contain numeric vector');
-        }
-        this.embeddingCache.set(key, vector);
-        return vector;
-      } catch (err) {
-        lastErr = err;
-        attempt++;
-        await this.sleep(250 * Math.pow(2, attempt));
-      }
-    }
-
-    console.error('getEmbedding failed for text:', key, lastErr);
-    throw new Error('Failed to get text embedding from Hugging Face API');
-  }
-
-  /** INTERNAL: find first numeric array in nested response */
-  private findFirstNumericArray(obj: any): number[] | null {
-    if (!obj) return null;
-    if (Array.isArray(obj) && obj.length && typeof obj[0] === 'number') {
-      return obj as number[];
-    }
-    if (Array.isArray(obj) && obj.length) {
-      return this.findFirstNumericArray(obj[0]);
-    }
-    if (typeof obj === 'object') {
-      for (const k of Object.keys(obj)) {
-        const res = this.findFirstNumericArray((obj as any)[k]);
-        if (res) return res;
-      }
-    }
-    return null;
-  }
-
-  /** Cosine similarity */
-  private cosineSimilarity(a: number[], b: number[]): number {
-    if (!Array.isArray(a) || !Array.isArray(b) || !a.length || !b.length) {
-      return 0;
-    }
-    const n = Math.min(a.length, b.length);
-    let dot = 0,
-      na = 0,
-      nb = 0;
-    for (let i = 0; i < n; i++) {
-      dot += a[i] * b[i];
-      na += a[i] * a[i];
-      nb += b[i] * b[i];
-    }
-    return na && nb ? dot / (Math.sqrt(na) * Math.sqrt(nb)) : 0;
+  /** Jaccard similarity (word set overlap) - quota-free local metric */
+  private jaccardSimilarity(a: string, b: string): number {
+    const wordsA = new Set(a.toLowerCase().split(/\s+/).filter(w => w.length > 2));
+    const wordsB = new Set(b.toLowerCase().split(/\s+/).filter(w => w.length > 2));
+    const intersect = new Set([...wordsA].filter(x => wordsB.has(x)));
+    const union = new Set([...wordsA, ...wordsB]);
+    return union.size ? intersect.size / union.size : 0;
   }
 
   private sleep(ms: number) {

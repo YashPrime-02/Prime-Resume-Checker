@@ -26,6 +26,7 @@ export class ResumeReviewComponent implements OnInit {
     '✅ Preparing final results...'
   ];
   currentMessageIndex = 0;
+classifierScore: any;
 
   constructor(private resumeService: ResumeReviewService) {}
 
@@ -59,7 +60,7 @@ export class ResumeReviewComponent implements OnInit {
 
     try {
       // Get suggestions with classifier score + similarity
-      const roles = await this.resumeService.getRoleSuggestions(resume, 3);
+      const roles = await this.resumeService.getRoleSuggestions(resume, 2);
 
       this.suggestions = roles.map(r => ({
         label: r.label,
