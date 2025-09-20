@@ -19,38 +19,38 @@
 
     <div *ngIf="progress === 100" class="result">
       <div class="best-fit">
-  <h3>📊 Match Result</h3>
-  <div class="best-row">
-    <div class="best-label">Best Fit Role</div>
-    <div class="best-value">{{ detectedRole || 'Unknown' }}</div>
-    <div class="best-score">
-      {{ suggestions?.length ? (suggestions[0].classifierScore * 100 | number:'1.0-0') : 0 }}%
-    </div>
-  </div>
-</div>
-
-
-<div class="suggestions" *ngIf="suggestions?.length">
-  <h4>Top Job Role Suggestions</h4>
-
-  <ul>
-    <li *ngFor="let s of suggestions; let idx = index" class="suggestion-item">
-      <div class="rank">#{{ idx + 1 }}</div>
-
-      <div class="suggestion-main">
-        <div class="role-name">{{ s.label }}</div>
-
-        <div class="role-meta">
-          <span class="meta-pill"> Compatibility: {{ (s.classifierScore * 100) | number:'1.0-0' }}%</span>
-        </div>
-
-        <div class="similarity-bar" aria-hidden="true">
-          <div class="similarity-fill" [style.width.%]="s.classifierScore * 100"></div>
+        <h3>📊 Match Result</h3>
+        <div class="best-row">
+          <div class="best-label">Best Fit Role</div>
+          <div class="best-value">{{ detectedRole || 'Unknown' }}</div>
+          <div class="best-score">
+            {{ suggestions?.length ? (suggestions[0].classifierScore * 100 | number:'1.0-0') : 0 }}%
+          </div>
         </div>
       </div>
-    </li>
-  </ul>
-</div>
+
+
+      <div class="suggestions" *ngIf="suggestions?.length">
+        <h4>Top Job Role Suggestions</h4>
+
+        <ul>
+          <li *ngFor="let s of suggestions; let idx = index" class="suggestion-item">
+            <div class="rank">#{{ idx + 1 }}</div>
+
+            <div class="suggestion-main">
+              <div class="role-name">{{ s.label }}</div>
+
+              <div class="role-meta">
+                <span class="meta-pill"> Compatibility: {{ (s.classifierScore * 100) | number:'1.0-0' }}%</span>
+              </div>
+
+              <div class="similarity-bar" aria-hidden="true">
+                <div class="similarity-fill" [style.width.%]="s.classifierScore * 100"></div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
 
 
       <div *ngIf="!suggestions || suggestions.length === 0" class="no-suggestions">
