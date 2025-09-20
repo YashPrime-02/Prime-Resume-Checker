@@ -106,7 +106,7 @@ export class ResumeReviewService {
   private async extractRoleKeywords(text: string): Promise<string[]> {
     if (!text) return [];
 
-    // Simple keyword extraction (same as before, but async-friendly)
+    // Simple keyword extraction
     const t = text.toLowerCase();
     const mapping: Record<string, string> = {
       frontend: 'Frontend Developer',
@@ -186,15 +186,12 @@ export class ResumeReviewService {
   async detectRoles(resume: string, maxCandidates = 5): Promise<ClassificationResult[]> {
     if (!resume || !resume.trim() || !this.genAI) return [{ label: 'Unknown', score: 0 }];
 
-    // Build dynamic candidate list: extracted + latest from internet
     const extracted = await this.extractRoleKeywords(resume);
     const defaults = Object.keys(this.roleDescriptions);
-    const candidateRoles = Array.from(new Set([...extracted, ...defaults])).slice(0, maxCandidates * 2); // Cap for prompt size
+    const candidateRoles = Array.from(new Set([...extracted, ...defaults])).slice(0, maxCandidates * 2);
 
-    // Compress resume (summarize) before classifying
     const summary = await this.summarizeText(resume);
 
-    // Zero-shot prompt for multi-label classification with scores
     const prompt = `Classify this resume summary into the best-fitting roles from this list: ${candidateRoles.join(', ')}.
     Output ONLY valid JSON array of objects like [{"label": "Role Name", "score": 0.95}, ...] where score is 0-1 confidence. Sort by score descending. Limit to top ${maxCandidates}.
     Summary: ${summary || resume}`;
@@ -205,10 +202,9 @@ export class ResumeReviewService {
       const result = await model.generateContent(prompt);
       let responseText = result.response.text().trim();
 
-      // Strip markdown code blocks (common Gemini output)
+      // Strip markdown code blocks
       let jsonStr = responseText.replace(/```(?:json)?\s*/g, '').replace(/```$/g, '').trim();
       if (!jsonStr.startsWith('[')) {
-        // Fallback: extract JSON if wrapped differently
         const jsonMatch = responseText.match(/\[[\s\S]*\]/);
         jsonStr = jsonMatch ? jsonMatch[0].trim() : responseText;
       }
@@ -219,40 +215,40 @@ export class ResumeReviewService {
       }
     } catch (err) {
       if (err instanceof Error && err.message.includes('Max limit used')) {
-        throw err; // Re-throw limit error
+        throw err;
       }
       console.warn('Gemini classification parse failed', err);
     }
 
-    // Sensible fallback
     return [{ label: 'Software Engineer', score: 0.3 }];
   }
 
   /**
    * Returns top role suggestions with both classifier confidence and
-   * embedding similarity (0..1). Sorted by similarity desc.
+   * embedding similarity (0..1). Picks maximum of the two scores for ranking.
    */
   async getRoleSuggestions(resume: string, topK = 3): Promise<RoleSuggestion[]> {
-    if (!resume || !resume.trim() || !this.genAI) return [{ label: 'Unknown', classifierScore: 0, similarity: 0 }];
+    if (!resume || !resume.trim() || !this.genAI)
+      return [{ label: 'Unknown', classifierScore: 0, similarity: 0 }];
 
-    // Step 1: get classifier candidate roles (label + classifier score)
     const candidates = await this.detectRoles(resume, topK);
 
-    // Step 2: compute similarities per candidate (local Jaccard for quota avoidance)
-    const suggestions: RoleSuggestion[] = [];
+    const suggestions: (RoleSuggestion & { maxScore: number })[] = [];
     for (const c of candidates) {
       try {
         const roleDesc = this.roleDescriptions[c.label] || c.label;
         const similarity = this.jaccardSimilarity(resume, roleDesc);
-        suggestions.push({ label: c.label, classifierScore: c.score, similarity });
+        const maxScore = Math.max(c.score, similarity);
+        suggestions.push({ label: c.label, classifierScore: c.score, similarity, maxScore });
       } catch (err) {
-        // If fails, set similarity 0
-        suggestions.push({ label: c.label, classifierScore: c.score, similarity: 0 });
+        suggestions.push({ label: c.label, classifierScore: c.score, similarity: 0, maxScore: c.score });
       }
     }
 
-    // sort by similarity desc
-    return suggestions.sort((a, b) => b.similarity - a.similarity).slice(0, topK);
+    return suggestions
+      .sort((a, b) => b.maxScore - a.maxScore)
+      .slice(0, topK)
+      .map(s => ({ label: s.label, classifierScore: s.classifierScore, similarity: s.similarity }));
   }
 
   /**
