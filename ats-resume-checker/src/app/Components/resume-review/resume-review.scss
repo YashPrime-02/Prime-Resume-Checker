@@ -43,9 +43,9 @@
   max-width: 920px;
   width: 100%;
   padding: 28px;
-  background: rgba(18, 21, 23, 0.88);
-  border-radius: 14px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 40px rgba(0, 255, 255, 0.02) inset;
+  /* Glass effect */
+
+
   text-align: left;
   margin: 16px;
   margin-top: 10%;
@@ -78,13 +78,13 @@
 }
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #00f2fe, #4facfe);
+  background: linear-gradient(90deg, #ffd700, );
   transition: width 0.35s ease;
 }
 .progress-text {
   min-width: 44px;
   text-align: center;
-  color: #00f2fe;
+  color: #ffd700;
   font-weight: 600;
 }
 
@@ -100,13 +100,56 @@
   opacity: 0;
   transform: translateY(8px);
   transition: all 0.45s ease;
-  font-size: 13px;
-  color: #cfeff7;
+  font-size: 15px;
+  color: #ffd700;
   margin: 0;
 }
 .messages p.active {
   opacity: 1;
   transform: translateY(0);
+}
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .messages p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .messages p {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .messages p {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .messages p {
+    font-size: 11px;
+  }
+}
+
+/* Active message stays the same animation, just scales text smaller on mobile */
+@media (max-width: 768px) {
+  .messages p.active {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .messages p.active {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .messages p.active {
+    font-size: 11px;
+  }
 }
 
 /* Result */
@@ -114,7 +157,11 @@
   margin-top: 18px;
   padding: 16px;
   border-radius: 10px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.02));
+/* Glass effect */
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.05));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px); /* Safari */
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Best fit row */
@@ -131,7 +178,7 @@
   margin-bottom: 12px;
 }
 .best-label {
-  color: #9fbfd9;
+  color: #ffd700;
   font-weight: 600;
 }
 .best-value {
@@ -140,7 +187,7 @@
   color: #ffffff;
 }
 .best-score {
-  color: #00f2fe;
+  color: #ffd700;
   font-weight: 700;
 }
 
@@ -150,7 +197,7 @@
 }
 .suggestions h4 {
   margin: 8px 0;
-  color: #d9f7ff;
+  color: #ffd700;
   font-size: 15px;
 }
 .suggestions ul {
@@ -180,7 +227,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #a9f7ff;
+  color: #ffd700;
   font-weight: 700;
   font-size: 14px;
   flex-shrink: 0;
@@ -193,7 +240,7 @@
 .role-name {
   font-weight: 700;
   font-size: 15px;
-  color: #eefaff;
+  color: white;
   margin-bottom: 6px;
 }
 .role-meta {
@@ -207,7 +254,7 @@
   padding: 4px 8px;
   border-radius: 999px;
   font-size: 12px;
-  color: #bfeefc;
+  color: white;
   font-weight: 600;
 }
 
@@ -221,7 +268,7 @@
 .similarity-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, rgba(0, 242, 254, 0.9), rgba(79, 172, 254, 0.9));
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.9), rgba(255, 215, 0, 0.9));
   transition: width 0.45s ease;
 }
 

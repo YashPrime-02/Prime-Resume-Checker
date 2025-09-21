@@ -107,7 +107,7 @@
 .upload-section h2 {
   font-size: 2em;
   margin-bottom: 24px;
-  color: #00f0ff;
+  color: #ffd700;
   text-align: center;
 }
 
@@ -122,7 +122,7 @@
 .file-label {
   position: relative;
   display: inline-block;
-  background: #00f0ff;
+  background: #ffd700;
   color: #181c2b;
   padding: 10px 18px;
   border-radius: 8px;
@@ -131,11 +131,11 @@
   font-size: 1em;
   transition: background 0.2s ease, transform 0.1s ease;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 240, 255, 0.3);
+  box-shadow: 0 2px 8px #ffd700;
 }
 
 .file-label:hover {
-  background: #00d0e5;
+  background: #ffd700;
   transform: scale(1.05);
 }
 
@@ -147,7 +147,7 @@
 }
 
 button[mat-raised-button].mat-primary {
-  background: linear-gradient(90deg, #00f0ff, #00d0e5);
+  background: linear-gradient(90deg, #ffd700, #ffd700);
   color: #181c2b;
   padding: 10px 18px;
   border-radius: 8px;
@@ -158,7 +158,7 @@ button[mat-raised-button].mat-primary {
 
 button[mat-raised-button].mat-primary:hover:not(:disabled) {
   transform: scale(1.05);
-  box-shadow: 0 0 15px #00f0ff80;
+  box-shadow: 0 0 15px #ffd70080;
 }
 
 button[mat-raised-button].mat-primary:disabled {
@@ -167,7 +167,7 @@ button[mat-raised-button].mat-primary:disabled {
 }
 
 .upload-footer button.btn.primary {
-  background: linear-gradient(90deg, #00f0ff, #00d0e5);
+  background: linear-gradient(90deg, #ffd700, #ffd700);
   color: #181c2b;
   padding: 12px 28px;
   font-size: 1.1em;
@@ -178,7 +178,7 @@ button[mat-raised-button].mat-primary:disabled {
 
 .upload-footer button.btn.primary:hover:not(:disabled) {
   transform: scale(1.05);
-  box-shadow: 0 0 15px #00f0ff80;
+  box-shadow: 0 0 15px #ffd70080;
 }
 
 .upload-footer button.btn.primary:disabled {
@@ -203,9 +203,9 @@ textarea {
 }
 
 textarea:focus {
-  border: 1.5px solid #00f0ff;
+  border: 1.5px solid #ffd700;
   outline: none;
-  box-shadow: 0 0 15px #00f0ff50;
+  box-shadow: 0 0 15px #ffd70050;
 }
 
 .loading-container {
@@ -218,14 +218,14 @@ textarea:focus {
 }
 
 .loading-container p {
-  color: #00f0ff;
+  color: #ffd700;
   font-size: 1.1em;
   margin: 0;
 }
 
 .animated-man {
   font-size: 48px;
-  color: #00f0ff;
+  color: #ffd700;
   animation: run 1.5s infinite linear;
 }
 
@@ -253,7 +253,7 @@ textarea:focus {
 
 .resume-preview h3 {
   margin-bottom: 16px;
-  color: #00f0ff;
+  color: #ffd700;
   text-align: center;
 }
 
@@ -266,7 +266,7 @@ textarea:focus {
 }
 
 .resume-preview .highlight {
-  color: #00f0ff;
+  color: #ffd700;
   font-weight: 700;
   background: rgba(0, 240, 255, 0.1);
   padding: 2px 4px;
@@ -285,7 +285,7 @@ textarea:focus {
 .file-label {
   position: relative;
   display: inline-block;
-  background: #00f0ff;
+  background: #ffd700;
   color: #181c2b;
   padding: 10px 18px;
   border-radius: 8px;
@@ -299,7 +299,7 @@ textarea:focus {
 }
 
 .file-label:hover {
-  background: #00d0e5;
+  background: #ffd700;
   transform: scale(1.05);
 }
 
@@ -417,13 +417,13 @@ textarea:focus {
   text-align: center;
   margin-top: 8px;
   font-size: 0.95em;
-  color: #00f0ff;
+  color: #ffd700;
   font-weight: 500;
   margin-bottom: 3%;
 }
 
 button[mat-raised-button].mat-primary {
-  background: linear-gradient(90deg, #00f0ff, #00d0e5);
+  background: linear-gradient(90deg, #ffd700, #ffd700);
   color: #181c2b;
   padding: 10px 18px;
   border-radius: 8px;
@@ -434,7 +434,7 @@ button[mat-raised-button].mat-primary {
 
 button[mat-raised-button].mat-primary:hover:not(:disabled) {
   transform: scale(1.05);
-  box-shadow: 0 0 15px #00f0ff80;
+  box-shadow: 0 0 15px #ffd70080;
 }
 
 button[mat-raised-button].mat-primary:disabled {
@@ -444,7 +444,7 @@ button[mat-raised-button].mat-primary:disabled {
 
 .upload-footer a.btn.primary {
   display: inline-block;
-  background: linear-gradient(90deg, #00f0ff, #00d0e5);
+  background: linear-gradient(90deg, #ffd700, #ffd700);
   color: #181c2b;
   padding: 10px 18px;
   font-size: 1em;
@@ -457,9 +457,9 @@ button[mat-raised-button].mat-primary:disabled {
 }
 
 .upload-footer a.btn.primary:hover:not(.disabled) {
-  background: #00d0e5;
+  background: #ffd700;
   transform: scale(1.05);
-  box-shadow: 0 0 15px #00f0ff80;
+  box-shadow: 0 0 15px #ffd70080;
 }
 
 .upload-footer a.btn.primary.disabled {

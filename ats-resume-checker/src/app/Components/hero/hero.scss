@@ -39,7 +39,7 @@ html, body {
   position: absolute;
   width: 2px;
   height: 250%;
-  background: linear-gradient(180deg, #00f0ff 0%, transparent 50%, #00f0ff 100%);
+  background: linear-gradient(180deg, #ffd700 0%, transparent 50%, #ffd700 100%);
   top: -75%;
   left: calc(20% * var(--i));
   transform-origin: center;
@@ -91,7 +91,7 @@ html, body {
 }
 
 .hero-content h1 span {
-  color: #00f0ff; /* aqua span for "Prime Resume Reviewer" */
+  color: #ffd700;
 }
 
 .hero-content p {
@@ -129,15 +129,14 @@ html, body {
 }
 
 .btn.primary {
-  background: linear-gradient(135deg, rgba(0, 240, 255, 0.3), rgba(0, 196, 204, 0.3));
-  color: #00f0ff;
-  border: 1px solid rgba(0, 240, 255, 0.5);
+ background: linear-gradient(45deg, #ffd700, #ffe066, #ffd700, #ffe066);
+  color: black;
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .btn.primary:hover {
-  background: linear-gradient(135deg, rgba(0, 240, 255, 0.5), rgba(0, 196, 204, 0.5));
-  color: #fff;
-  box-shadow: 0 12px 24px rgba(0, 240, 255, 0.3), 0 0 20px rgba(0, 240, 255, 0.2);
+   background: linear-gradient(45deg, #ffd700, #ffe066, #ffd700, #ffe066);
+  color: black;
   transform: translateY(-3px) scale(1.05);
 }
 
@@ -186,7 +185,7 @@ html, body {
   position: absolute;
   width: 2px;
   height: 150%;
-  background: linear-gradient(180deg, #ff00ff 0%, transparent 50%, #00f0ff 100%);
+  background: linear-gradient(45deg, #ffd700, #ffe066, #ffd700, #ffe066);
   top: -25%;
   left: calc(15% * var(--i));
   transform: rotate(45deg);
@@ -243,7 +242,7 @@ html, body {
   position: absolute;
   width: 2px;
   height: 150%;
-  background: linear-gradient(180deg, #ff00ff 0%, transparent 50%, #00f0ff 100%);
+background: linear-gradient(45deg, #ffd700, #ffe066, #ffd700, #ffe066);
   top: -25%;
   left: calc(15% * var(--i));
   transform: rotate(45deg);
@@ -274,7 +273,7 @@ html, body {
   font-size: 2.5rem;
   margin-bottom: 60px;
   font-weight: 700;
-  color: #00f0ff;
+  color: #ffd700;
   letter-spacing: 1px;
 }
 
@@ -311,7 +310,7 @@ html, body {
 
 .point-content {
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(0, 240, 255, 0.4);
+  border: 1px solid #ffd700;
   backdrop-filter: blur(6px);
   padding: 20px 25px;
   border-radius: 12px;
@@ -323,14 +322,14 @@ html, body {
 
 .point-content:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 30px rgba(0, 240, 255, 0.3);
+  box-shadow: 0 12px 30px #ffd700;
 }
 
 .point-content h3 {
   margin: 0 0 10px 0;
   font-size: 1.5rem;
   font-weight: 600;
-  color: #00f0ff;
+  color: #ffd700;
 }
 
 .point-content p {
@@ -347,7 +346,7 @@ html, body {
   top: 0;
   bottom: 0;
   transform: translateX(-50%);
-  width: 4px;
+  width: 10px;
   background: rgba(255, 255, 255, 0.2);
   border-radius: 2px;
   z-index: 1;
@@ -358,9 +357,9 @@ html, body {
   left: 50%;
   width: 20px;
   height: 20px;
-  background: #00f0ff;
+  background: #ffd700;
   border-radius: 50%;
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.8);
+
   transform: translate(-50%, 0);
   transition: top 0.2s ease-out;
   z-index: 2;
@@ -427,7 +426,7 @@ html, body {
   position: absolute;
   width: 2px;
   height: 200%;
-  background: linear-gradient(180deg, #00f0ff 0%, transparent 50%, #ff00ff 100%);
+  background: linear-gradient(180deg, #ffd700 0%, transparent 50%, #ffd700 100%);
   top: -50%;
   left: calc(20% * var(--i));
   opacity: 0.4;
@@ -446,7 +445,7 @@ html, body {
   z-index: 2;
   text-align: center;
   font-size: 2.5rem;
-  color: #00f0ff;
+  color: #ffd700;
   margin: 30px 0;
 }
 
@@ -517,7 +516,7 @@ html, body {
 }
 
 .testimonial-card h3 {
-  color: #00f0ff;
+  color: #ffd700;
   margin: 10px 0 5px;
 }
 

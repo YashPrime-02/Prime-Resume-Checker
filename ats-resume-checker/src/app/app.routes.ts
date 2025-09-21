@@ -3,6 +3,7 @@ import { Hero } from './Components/hero/hero';
 import { UploadComponent } from './Components/resume-review/upload.component/upload.component';
 import { Contact } from './Components/contact/contact';
 import { ResumeReviewComponent } from './Components/resume-review/resume-review';
+import { AboutComponent } from './Components/about/about';
 
 export const routes: Routes = [
 
@@ -13,6 +14,12 @@ export const routes: Routes = [
     component: Hero,
     data: { title: 'PRIME RESUME REVIEWER' }
   },
+  {
+    path: 'about',
+    component: AboutComponent,
+    data: { title: 'PRIME RESUME REVIEWER' }
+  },
+
   {
     path: 'upload',
     component: UploadComponent,
